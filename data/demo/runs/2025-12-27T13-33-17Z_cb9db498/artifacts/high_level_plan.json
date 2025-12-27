@@ -1,0 +1,185 @@
+{
+  "intents": [
+    {
+      "intent_id": "intent_001",
+      "description": "Calculate the overall NPS score and breakdown by region.",
+      "segments_needed": [
+        "Region"
+      ],
+      "priority": 1
+    },
+    {
+      "intent_id": "intent_002",
+      "description": "Assess overall satisfaction using Top 2 Box analysis for Q_OVERALL_SAT.",
+      "segments_needed": [],
+      "priority": 1
+    },
+    {
+      "intent_id": "intent_003",
+      "description": "Identify key drivers of satisfaction by correlating Q_OVERALL_SAT with Q_EASE_OF_USE, Q_VALUE, and Q_SUPPORT_SAT.",
+      "segments_needed": [],
+      "priority": 1
+    },
+    {
+      "intent_id": "intent_004",
+      "description": "Compare satisfaction levels across different plan types using Q_PLAN and Q_OVERALL_SAT.",
+      "segments_needed": [
+        "Plan Type"
+      ],
+      "priority": 1
+    },
+    {
+      "intent_id": "intent_005",
+      "description": "Analyze satisfaction levels across different customer tenures using Q_TENURE and Q_OVERALL_SAT.",
+      "segments_needed": [
+        "Tenure"
+      ],
+      "priority": 1
+    },
+    {
+      "intent_id": "intent_006",
+      "description": "Evaluate feature usage frequency using Q_FEATURES_USED and correlate with Q_OVERALL_SAT.",
+      "segments_needed": [],
+      "priority": 2
+    },
+    {
+      "intent_id": "intent_007",
+      "description": "Identify customers at risk of churn by analyzing low scores in Q_NPS and Q_PURCHASE_INTENT.",
+      "segments_needed": [],
+      "priority": 1
+    },
+    {
+      "intent_id": "intent_008",
+      "description": "Examine satisfaction levels by usage frequency using Q_USAGE_FREQ and Q_OVERALL_SAT.",
+      "segments_needed": [
+        "Usage Frequency"
+      ],
+      "priority": 2
+    },
+    {
+      "intent_id": "intent_009",
+      "description": "Analyze demographic patterns in satisfaction levels using Q_AGE and Q_GENDER with Q_OVERALL_SAT.",
+      "segments_needed": [
+        "Demographics"
+      ],
+      "priority": 3
+    },
+    {
+      "intent_id": "intent_010",
+      "description": "Determine if enterprise customers are more satisfied than free/basic users using Q_PLAN and Q_OVERALL_SAT.",
+      "segments_needed": [
+        "Plan Type"
+      ],
+      "priority": 1
+    },
+    {
+      "intent_id": "intent_011",
+      "description": "Identify which features drive the highest satisfaction by correlating Q_FEATURES_USED with Q_OVERALL_SAT.",
+      "segments_needed": [],
+      "priority": 2
+    },
+    {
+      "intent_id": "intent_012",
+      "description": "Assess the satisfaction profile of long-term vs new customers using Q_TENURE and Q_OVERALL_SAT.",
+      "segments_needed": [
+        "Tenure"
+      ],
+      "priority": 1
+    }
+  ],
+  "rationale": "The analysis plan is designed to address the key research objectives outlined in the project scope. The intents focus on understanding overall satisfaction, segment differences, feature usage, and retention risks. High priority is given to analyses that directly inform product improvement and customer retention strategies. Suggested segments are based on demographic and usage characteristics that are likely to reveal meaningful patterns.",
+  "suggested_segments": [
+    {
+      "segment_id": "segment_001",
+      "name": "Region",
+      "definition": {
+        "kind": "in",
+        "question_id": "Q_REGION",
+        "values": [
+          "NORTH",
+          "SOUTH",
+          "EAST",
+          "WEST",
+          "CENTRAL"
+        ]
+      },
+      "intended_partition": true,
+      "notes": "Segments based on geographic location."
+    },
+    {
+      "segment_id": "segment_002",
+      "name": "Plan Type",
+      "definition": {
+        "kind": "in",
+        "question_id": "Q_PLAN",
+        "values": [
+          "FREE",
+          "BASIC",
+          "PRO",
+          "ENT"
+        ]
+      },
+      "intended_partition": true,
+      "notes": "Segments based on subscription plan."
+    },
+    {
+      "segment_id": "segment_003",
+      "name": "Tenure",
+      "definition": {
+        "kind": "in",
+        "question_id": "Q_TENURE",
+        "values": [
+          "NEW",
+          "MED",
+          "LONG"
+        ]
+      },
+      "intended_partition": true,
+      "notes": "Segments based on customer tenure."
+    },
+    {
+      "segment_id": "segment_004",
+      "name": "Usage Frequency",
+      "definition": {
+        "kind": "in",
+        "question_id": "Q_USAGE_FREQ",
+        "values": [
+          "DAILY",
+          "WEEKLY",
+          "MONTHLY",
+          "RARELY"
+        ]
+      },
+      "intended_partition": true,
+      "notes": "Segments based on how often the product is used."
+    },
+    {
+      "segment_id": "segment_005",
+      "name": "Demographics",
+      "definition": {
+        "kind": "and",
+        "children": [
+          {
+            "kind": "range",
+            "question_id": "Q_AGE",
+            "min": 18,
+            "max": 65,
+            "inclusive": true
+          },
+          {
+            "kind": "in",
+            "question_id": "Q_GENDER",
+            "values": [
+              "M",
+              "F",
+              "NB",
+              "PNS"
+            ]
+          }
+        ]
+      },
+      "intended_partition": false,
+      "notes": "Segments based on age and gender."
+    }
+  ]
+}

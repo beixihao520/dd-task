@@ -1,0 +1,42 @@
+[
+  {
+    "intent_id": "intent_003",
+    "description": "Identify key drivers of satisfaction by correlating Q_OVERALL_SAT with Q_EASE_OF_USE, Q_VALUE, and Q_SUPPORT_SAT.",
+    "errors": [
+      {
+        "code": "ambiguous_request",
+        "message": "Request is ambiguous. Possible interpretations: [\"The request mentions 'correlating' which suggests a statistical analysis like correlation coefficients, which is not directly supported by the cut specification format. Consider using a statistical tool for correlation analysis.\", 'If the intent is to analyze satisfaction by breaking it down by ease of use, value, and support satisfaction, consider using mean or top2box metrics for each of these questions separately.']",
+        "context": {}
+      }
+    ]
+  },
+  {
+    "intent_id": "intent_006",
+    "description": "Identify customers at risk of churn by analyzing low scores in Q_NPS and Q_PURCHASE_INTENT.",
+    "errors": [
+      {
+        "code": "metric_incompatible",
+        "message": "Metric 'bottom2box' is not compatible with question type 'nps_0_10'",
+        "context": {
+          "metric_type": "bottom2box",
+          "question_type": "nps_0_10",
+          "compatible_types": [
+            "likert_1_7",
+            "likert_1_5"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "intent_id": "intent_007",
+    "description": "Examine the correlation between usage frequency (Q_USAGE_FREQ) and satisfaction (Q_OVERALL_SAT).",
+    "errors": [
+      {
+        "code": "ambiguous_request",
+        "message": "Request is ambiguous. Possible interpretations: ['Compute correlation coefficient between Q_USAGE_FREQ and Q_OVERALL_SAT.', 'Cross-tabulate Q_USAGE_FREQ and Q_OVERALL_SAT to see distribution patterns.']",
+        "context": {}
+      }
+    ]
+  }
+]

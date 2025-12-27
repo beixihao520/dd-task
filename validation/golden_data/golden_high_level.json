@@ -1,0 +1,112 @@
+[
+    {
+        "name": "Standard Satisfaction",
+        "scope": "Analyze overall satisfaction and NPS across all demographics.",
+        "expectations": [
+            "nps",
+            "satisfaction",
+            "gender",
+            "age",
+            "region"
+        ]
+    },
+    {
+        "name": "Retention & Churn",
+        "scope": "Identify drivers of churn and focus on respondents with low purchase intent.",
+        "expectations": [
+            "purchase intent",
+            "churn",
+            "risk",
+            "satisfaction",
+            "low intent"
+        ]
+    },
+    {
+        "name": "Demographic Deep-Dive",
+        "scope": "Compare results by age, gender, and income. We need to know who our customers are.",
+        "expectations": [
+            "age",
+            "gender",
+            "income",
+            "demographic",
+            "distribution"
+        ]
+    },
+    {
+        "name": "Feature Usage Optimization",
+        "scope": "Which features are used most? Correlate feature usage with value for money.",
+        "expectations": [
+            "features",
+            "usage",
+            "value for money",
+            "api",
+            "dashboard"
+        ]
+    },
+    {
+        "name": "Regional Performance",
+        "scope": "Focus on geographic differences. Is the North performing better than the West?",
+        "expectations": [
+            "region",
+            "north",
+            "west",
+            "geographic",
+            "location"
+        ]
+    },
+    {
+        "name": "Plan Tier Comparison",
+        "scope": "Are Enterprise customers more satisfied than Free users? Compare all plan types.",
+        "expectations": [
+            "plan",
+            "enterprise",
+            "free",
+            "tier",
+            "subscription"
+        ]
+    },
+    {
+        "name": "Customer Tenure Analytics",
+        "scope": "Analyze how satisfaction changes as customers stay longer with us.",
+        "expectations": [
+            "tenure",
+            "long-term",
+            "new",
+            "duration",
+            "retention"
+        ]
+    },
+    {
+        "name": "Support Quality Assessment",
+        "scope": "Evaluate the customer support experience and its impact on overall sentiment.",
+        "expectations": [
+            "support",
+            "satisfaction",
+            "experience",
+            "nps",
+            "service"
+        ]
+    },
+    {
+        "name": "Pricing & Value Analysis",
+        "scope": "Is the product worth the money? Breakdown value ratings by income level.",
+        "expectations": [
+            "value",
+            "income",
+            "price",
+            "worth",
+            "money"
+        ]
+    },
+    {
+        "name": "Comprehensive Audit",
+        "scope": "Run a full audit of all survey metrics to capture every possible insight.",
+        "expectations": [
+            "nps",
+            "sat",
+            "ease",
+            "value",
+            "support"
+        ]
+    }
+]

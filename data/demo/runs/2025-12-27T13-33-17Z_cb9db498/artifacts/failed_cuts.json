@@ -1,0 +1,42 @@
+[
+  {
+    "intent_id": "intent_003",
+    "description": "Identify key drivers of satisfaction by correlating Q_OVERALL_SAT with Q_EASE_OF_USE, Q_VALUE, and Q_SUPPORT_SAT.",
+    "errors": [
+      {
+        "code": "ambiguous_request",
+        "message": "Request is ambiguous. Possible interpretations: ['The request is asking for a correlation analysis, which is not directly supported by the cut specification format. Consider using statistical software for correlation analysis.', 'If the intent is to analyze satisfaction by different dimensions, specify which dimensions to use for cross-tabulation.']",
+        "context": {}
+      }
+    ]
+  },
+  {
+    "intent_id": "intent_007",
+    "description": "Identify customers at risk of churn by analyzing low scores in Q_NPS and Q_PURCHASE_INTENT.",
+    "errors": [
+      {
+        "code": "metric_incompatible",
+        "message": "Metric 'bottom2box' is not compatible with question type 'nps_0_10'",
+        "context": {
+          "metric_type": "bottom2box",
+          "question_type": "nps_0_10",
+          "compatible_types": [
+            "likert_1_5",
+            "likert_1_7"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "intent_id": "intent_011",
+    "description": "Identify which features drive the highest satisfaction by correlating Q_FEATURES_USED with Q_OVERALL_SAT.",
+    "errors": [
+      {
+        "code": "ambiguous_request",
+        "message": "Request is ambiguous. Possible interpretations: ['Correlation analysis is not directly supported by the available metrics. Consider using a different approach such as mean satisfaction by feature usage.', 'If the intent is to find the mean satisfaction score for each feature used, specify which features to analyze.']",
+        "context": {}
+      }
+    ]
+  }
+]

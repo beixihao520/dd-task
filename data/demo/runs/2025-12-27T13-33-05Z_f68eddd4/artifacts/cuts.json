@@ -1,0 +1,180 @@
+[
+  {
+    "cut_id": "cut_003",
+    "metric": {
+      "type": "nps",
+      "question_id": "Q_NPS",
+      "params": {}
+    },
+    "dimensions": [
+      {
+        "kind": "question",
+        "id": "Q_REGION"
+      }
+    ],
+    "filter": null,
+    "weight_column": null,
+    "output": {}
+  },
+  {
+    "cut_id": "cut_003",
+    "metric": {
+      "type": "top2box",
+      "question_id": "Q_OVERALL_SAT",
+      "params": {
+        "top_values": [
+          4,
+          5
+        ]
+      }
+    },
+    "dimensions": [
+      {
+        "kind": "segment",
+        "id": "segment_002"
+      }
+    ],
+    "filter": null,
+    "weight_column": null,
+    "output": {}
+  },
+  {
+    "cut_id": "cut_003",
+    "metric": {
+      "type": "mean",
+      "question_id": "Q_OVERALL_SAT",
+      "params": {}
+    },
+    "dimensions": [
+      {
+        "kind": "segment",
+        "id": "segment_002"
+      },
+      {
+        "kind": "segment",
+        "id": "segment_003"
+      },
+      {
+        "kind": "segment",
+        "id": "segment_001"
+      }
+    ],
+    "filter": null,
+    "weight_column": null,
+    "output": {}
+  },
+  {
+    "cut_id": "cut_003",
+    "metric": {
+      "type": "frequency",
+      "question_id": "Q_FEATURES_USED",
+      "params": {}
+    },
+    "dimensions": [
+      {
+        "kind": "question",
+        "id": "Q_OVERALL_SAT"
+      }
+    ],
+    "filter": null,
+    "weight_column": null,
+    "output": {}
+  },
+  {
+    "cut_id": "cut_003",
+    "metric": {
+      "type": "mean",
+      "question_id": "Q_OVERALL_SAT",
+      "params": {}
+    },
+    "dimensions": [
+      {
+        "kind": "question",
+        "id": "Q_TENURE"
+      }
+    ],
+    "filter": null,
+    "weight_column": null,
+    "output": {}
+  },
+  {
+    "cut_id": "cut_003",
+    "metric": {
+      "type": "mean",
+      "question_id": "Q_OVERALL_SAT",
+      "params": {}
+    },
+    "dimensions": [
+      {
+        "kind": "question",
+        "id": "Q_AGE"
+      },
+      {
+        "kind": "question",
+        "id": "Q_GENDER"
+      }
+    ],
+    "filter": null,
+    "weight_column": null,
+    "output": {}
+  },
+  {
+    "cut_id": "cut_003",
+    "metric": {
+      "type": "mean",
+      "question_id": "Q_OVERALL_SAT",
+      "params": {}
+    },
+    "dimensions": [
+      {
+        "kind": "question",
+        "id": "Q_PLAN"
+      }
+    ],
+    "filter": {
+      "kind": "in",
+      "question_id": "Q_PLAN",
+      "values": [
+        "FREE",
+        "BASIC",
+        "ENT"
+      ]
+    },
+    "weight_column": null,
+    "output": {}
+  },
+  {
+    "cut_id": "cut_003",
+    "metric": {
+      "type": "top2box",
+      "question_id": "Q_EASE_OF_USE",
+      "params": {
+        "top_values": [
+          4,
+          5
+        ]
+      }
+    },
+    "dimensions": [],
+    "filter": null,
+    "weight_column": null,
+    "output": {}
+  },
+  {
+    "cut_id": "cut_003",
+    "metric": {
+      "type": "mean",
+      "question_id": "Q_OVERALL_SAT",
+      "params": {}
+    },
+    "dimensions": [
+      {
+        "kind": "question",
+        "id": "Q_INCOME"
+      }
+    ],
+    "filter": null,
+    "weight_column": null,
+    "output": {}
+  }
+]

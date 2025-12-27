@@ -1,0 +1,761 @@
+[
+  {
+    "prompt": "Female respondents",
+    "expected_ok": true,
+    "expected_base_n": 31,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_GENDER",
+      "value": "F"
+    }
+  },
+  {
+    "prompt": "Male respondents",
+    "expected_ok": true,
+    "expected_base_n": 22,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_GENDER",
+      "value": "M"
+    }
+  },
+  {
+    "prompt": "Respondents aged 25-34",
+    "expected_ok": true,
+    "expected_base_n": 18,
+    "expected_definition": {
+      "kind": "range",
+      "question_id": "Q_AGE",
+      "min": 25,
+      "max": 34,
+      "inclusive": true
+    }
+  },
+  {
+    "prompt": "Young respondents (under 30)",
+    "expected_ok": true,
+    "expected_base_n": 20,
+    "expected_definition": {
+      "kind": "range",
+      "question_id": "Q_AGE",
+      "min": 0,
+      "max": 29,
+      "inclusive": true
+    }
+  },
+  {
+    "prompt": "Older respondents (50+)",
+    "expected_ok": false,
+    "expected_base_n": null
+  },
+  {
+    "prompt": "Respondents in the North region",
+    "expected_ok": true,
+    "expected_base_n": 16,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_REGION",
+      "value": "NORTH"
+    }
+  },
+  {
+    "prompt": "Respondents in the South region",
+    "expected_ok": true,
+    "expected_base_n": 16,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_REGION",
+      "value": "SOUTH"
+    }
+  },
+  {
+    "prompt": "Respondents in East or West regions",
+    "expected_ok": true,
+    "expected_base_n": 47,
+    "expected_definition": {
+      "kind": "in",
+      "question_id": "Q_REGION",
+      "values": [
+        "EAST",
+        "WEST"
+      ]
+    }
+  },
+  {
+    "prompt": "High income households",
+    "expected_ok": true,
+    "expected_base_n": 45,
+    "expected_definition": {
+      "kind": "in",
+      "question_id": "Q_INCOME",
+      "values": [
+        "HIGH",
+        "VHIGH"
+      ]
+    }
+  },
+  {
+    "prompt": "Low income households",
+    "expected_ok": true,
+    "expected_base_n": 31,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_INCOME",
+      "value": "LOW"
+    }
+  },
+  {
+    "prompt": "Daily users of the product",
+    "expected_ok": true,
+    "expected_base_n": 26,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_USAGE_FREQ",
+      "value": "DAILY"
+    }
+  },
+  {
+    "prompt": "Weekly or monthly users",
+    "expected_ok": true,
+    "expected_base_n": 46,
+    "expected_definition": {
+      "kind": "in",
+      "question_id": "Q_USAGE_FREQ",
+      "values": [
+        "WEEKLY",
+        "MONTHLY"
+      ]
+    }
+  },
+  {
+    "prompt": "New customers (less than 6 months)",
+    "expected_ok": true,
+    "expected_base_n": 34,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_TENURE",
+      "value": "NEW"
+    }
+  },
+  {
+    "prompt": "Long-term customers (2+ years)",
+    "expected_ok": true,
+    "expected_base_n": 33,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_TENURE",
+      "value": "LONG"
+    }
+  },
+  {
+    "prompt": "Enterprise plan users",
+    "expected_ok": true,
+    "expected_base_n": 28,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_PLAN",
+      "value": "ENT"
+    }
+  },
+  {
+    "prompt": "Free or Basic plan users",
+    "expected_ok": true,
+    "expected_base_n": 46,
+    "expected_definition": {
+      "kind": "in",
+      "question_id": "Q_PLAN",
+      "values": [
+        "FREE",
+        "BASIC"
+      ]
+    }
+  },
+  {
+    "prompt": "Highly satisfied customers",
+    "expected_ok": true,
+    "expected_base_n": 20,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_OVERALL_SAT",
+      "value": 5
+    }
+  },
+  {
+    "prompt": "Dissatisfied customers",
+    "expected_ok": true,
+    "expected_base_n": 86,
+    "expected_definition": {
+      "kind": "or",
+      "children": [
+        {
+          "kind": "range",
+          "question_id": "Q_NPS",
+          "min": 0,
+          "max": 6,
+          "inclusive": true
+        },
+        {
+          "kind": "range",
+          "question_id": "Q_OVERALL_SAT",
+          "min": 1,
+          "max": 2,
+          "inclusive": true
+        },
+        {
+          "kind": "range",
+          "question_id": "Q_SUPPORT_SAT",
+          "min": 1,
+          "max": 2,
+          "inclusive": true
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Promoters (NPS 9-10)",
+    "expected_ok": true,
+    "expected_base_n": 19,
+    "expected_definition": {
+      "kind": "range",
+      "question_id": "Q_NPS",
+      "min": 9,
+      "max": 10,
+      "inclusive": true
+    }
+  },
+  {
+    "prompt": "Detractors (NPS 0-6)",
+    "expected_ok": true,
+    "expected_base_n": 66,
+    "expected_definition": {
+      "kind": "range",
+      "question_id": "Q_NPS",
+      "min": 0,
+      "max": 6,
+      "inclusive": true
+    }
+  },
+  {
+    "prompt": "Users who have used the Mobile App",
+    "expected_ok": true,
+    "expected_base_n": 24,
+    "expected_definition": {
+      "kind": "contains_any",
+      "question_id": "Q_FEATURES_USED",
+      "values": [
+        "MOBILE"
+      ]
+    }
+  },
+  {
+    "prompt": "Users who use API or Collaboration tools",
+    "expected_ok": true,
+    "expected_base_n": 59,
+    "expected_definition": {
+      "kind": "contains_any",
+      "question_id": "Q_FEATURES_USED",
+      "values": [
+        "API",
+        "COLLAB"
+      ]
+    }
+  },
+  {
+    "prompt": "Power users (Daily users on Pro or Enterprise plans)",
+    "expected_ok": true,
+    "expected_base_n": 12,
+    "expected_definition": {
+      "kind": "and",
+      "children": [
+        {
+          "kind": "eq",
+          "question_id": "Q_USAGE_FREQ",
+          "value": "DAILY"
+        },
+        {
+          "kind": "in",
+          "question_id": "Q_PLAN",
+          "values": [
+            "PRO",
+            "ENT"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Frustrated long-term users (2+ years and Sat 1-2)",
+    "expected_ok": true,
+    "expected_base_n": 14,
+    "expected_definition": {
+      "kind": "and",
+      "children": [
+        {
+          "kind": "eq",
+          "question_id": "Q_TENURE",
+          "value": "LONG"
+        },
+        {
+          "kind": "range",
+          "question_id": "Q_OVERALL_SAT",
+          "min": 1,
+          "max": 2,
+          "inclusive": true
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Young high-earners (Under 35 and High/VHigh income)",
+    "expected_ok": true,
+    "expected_base_n": 13,
+    "expected_definition": {
+      "kind": "and",
+      "children": [
+        {
+          "kind": "range",
+          "question_id": "Q_AGE",
+          "min": 0,
+          "max": 34,
+          "inclusive": true
+        },
+        {
+          "kind": "in",
+          "question_id": "Q_INCOME",
+          "values": [
+            "HIGH",
+            "VHIGH"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Western region Detractors",
+    "expected_ok": true,
+    "expected_base_n": 12,
+    "expected_definition": {
+      "kind": "and",
+      "children": [
+        {
+          "kind": "eq",
+          "question_id": "Q_REGION",
+          "value": "WEST"
+        },
+        {
+          "kind": "range",
+          "question_id": "Q_NPS",
+          "min": 0,
+          "max": 6,
+          "inclusive": true
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Non-binary respondents in the East",
+    "expected_ok": true,
+    "expected_base_n": 5,
+    "expected_definition": {
+      "kind": "and",
+      "children": [
+        {
+          "kind": "eq",
+          "question_id": "Q_GENDER",
+          "value": "NB"
+        },
+        {
+          "kind": "eq",
+          "question_id": "Q_REGION",
+          "value": "EAST"
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Enterprise users who are Not Daily users",
+    "expected_ok": true,
+    "expected_base_n": 24,
+    "expected_definition": {
+      "kind": "and",
+      "children": [
+        {
+          "kind": "eq",
+          "question_id": "Q_PLAN",
+          "value": "ENT"
+        },
+        {
+          "kind": "not",
+          "child": {
+            "kind": "eq",
+            "question_id": "Q_USAGE_FREQ",
+            "value": "DAILY"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Respondents who have NOT used the Dashboard",
+    "expected_ok": true,
+    "expected_base_n": 60,
+    "expected_definition": {
+      "kind": "not",
+      "child": {
+        "kind": "contains_any",
+        "question_id": "Q_FEATURES_USED",
+        "values": [
+          "DASH"
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "Middle-aged users (35-54)",
+    "expected_ok": true,
+    "expected_base_n": 22,
+    "expected_definition": {
+      "kind": "range",
+      "question_id": "Q_AGE",
+      "min": 35,
+      "max": 54,
+      "inclusive": true
+    }
+  },
+  {
+    "prompt": "Central region users on Free plan",
+    "expected_ok": true,
+    "expected_base_n": 3,
+    "expected_definition": {
+      "kind": "and",
+      "children": [
+        {
+          "kind": "eq",
+          "question_id": "Q_REGION",
+          "value": "CENTRAL"
+        },
+        {
+          "kind": "eq",
+          "question_id": "Q_PLAN",
+          "value": "FREE"
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Highly likely to purchase again",
+    "expected_ok": true,
+    "expected_base_n": 23,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_PURCHASE_INTENT",
+      "value": 5
+    }
+  },
+  {
+    "prompt": "At risk users (Very Unlikely to purchase again)",
+    "expected_ok": true,
+    "expected_base_n": 17,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_PURCHASE_INTENT",
+      "value": 1
+    }
+  },
+  {
+    "prompt": "Users who find it 'Very Easy' to use",
+    "expected_ok": true,
+    "expected_base_n": 19,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_EASE_OF_USE",
+      "value": 5
+    }
+  },
+  {
+    "prompt": "Users who find it 'Difficult' or 'Very Difficult'",
+    "expected_ok": true,
+    "expected_base_n": 39,
+    "expected_definition": {
+      "kind": "in",
+      "question_id": "Q_EASE_OF_USE",
+      "values": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "prompt": "Excellent value for money",
+    "expected_ok": true,
+    "expected_base_n": 26,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_VALUE",
+      "value": 5
+    }
+  },
+  {
+    "prompt": "Poor or Very Poor value for money",
+    "expected_ok": true,
+    "expected_base_n": 33,
+    "expected_definition": {
+      "kind": "in",
+      "question_id": "Q_VALUE",
+      "values": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "prompt": "Respondents in North or South with MED income",
+    "expected_ok": true,
+    "expected_base_n": 6,
+    "expected_definition": {
+      "kind": "and",
+      "children": [
+        {
+          "kind": "in",
+          "question_id": "Q_REGION",
+          "values": [
+            "NORTH",
+            "SOUTH"
+          ]
+        },
+        {
+          "kind": "eq",
+          "question_id": "Q_INCOME",
+          "value": "MED"
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Female Enterprise users",
+    "expected_ok": true,
+    "expected_base_n": 12,
+    "expected_definition": {
+      "kind": "and",
+      "children": [
+        {
+          "kind": "eq",
+          "question_id": "Q_GENDER",
+          "value": "F"
+        },
+        {
+          "kind": "eq",
+          "question_id": "Q_PLAN",
+          "value": "ENT"
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Respondents aged 21 to 65",
+    "expected_ok": true,
+    "expected_base_n": 62,
+    "expected_definition": {
+      "kind": "range",
+      "question_id": "Q_AGE",
+      "min": 21,
+      "max": 65,
+      "inclusive": true
+    }
+  },
+  {
+    "prompt": "Users who use Export, API, and Mobile",
+    "expected_ok": true,
+    "expected_base_n": 74,
+    "expected_definition": {
+      "kind": "contains_any",
+      "question_id": "Q_FEATURES_USED",
+      "values": [
+        "EXPORT",
+        "API",
+        "MOBILE"
+      ]
+    }
+  },
+  {
+    "prompt": "Respondents who use NONE of the features",
+    "expected_ok": true,
+    "expected_base_n": 7,
+    "expected_definition": {
+      "kind": "not",
+      "child": {
+        "kind": "contains_any",
+        "question_id": "Q_FEATURES_USED",
+        "values": [
+          "DASH",
+          "REPORT",
+          "EXPORT",
+          "API",
+          "MOBILE"
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "People who are NOT 'Very Satisfied' with support",
+    "expected_ok": true,
+    "expected_base_n": 75,
+    "expected_definition": {
+      "kind": "not",
+      "child": {
+        "kind": "eq",
+        "question_id": "Q_SUPPORT_SAT",
+        "value": 5
+      }
+    }
+  },
+  {
+    "prompt": "Respondents in North who use Reporting",
+    "expected_ok": true,
+    "expected_base_n": 5,
+    "expected_definition": {
+      "kind": "and",
+      "children": [
+        {
+          "kind": "eq",
+          "question_id": "Q_REGION",
+          "value": "NORTH"
+        },
+        {
+          "kind": "contains_any",
+          "question_id": "Q_FEATURES_USED",
+          "values": [
+            "REPORT"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Male respondents over 40",
+    "expected_ok": false,
+    "expected_base_n": null
+  },
+  {
+    "prompt": "Non-Promoters (NPS 0-8)",
+    "expected_ok": true,
+    "expected_base_n": 81,
+    "expected_definition": {
+      "kind": "range",
+      "question_id": "Q_NPS",
+      "min": 0,
+      "max": 8,
+      "inclusive": true
+    }
+  },
+  {
+    "prompt": "Low-earning New customers",
+    "expected_ok": true,
+    "expected_base_n": 12,
+    "expected_definition": {
+      "kind": "and",
+      "children": [
+        {
+          "kind": "eq",
+          "question_id": "Q_INCOME",
+          "value": "LOW"
+        },
+        {
+          "kind": "eq",
+          "question_id": "Q_TENURE",
+          "value": "NEW"
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Users who use Dashboard but find it Difficult",
+    "expected_ok": true,
+    "expected_base_n": 13,
+    "expected_definition": {
+      "kind": "and",
+      "children": [
+        {
+          "kind": "contains_any",
+          "question_id": "Q_FEATURES_USED",
+          "values": [
+            "DASH"
+          ]
+        },
+        {
+          "kind": "in",
+          "question_id": "Q_EASE_OF_USE",
+          "values": [
+            1,
+            2
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Neutral users (Sat 3 and Ease 3)",
+    "expected_ok": true,
+    "expected_base_n": 5,
+    "expected_definition": {
+      "kind": "and",
+      "children": [
+        {
+          "kind": "eq",
+          "question_id": "Q_OVERALL_SAT",
+          "value": 3
+        },
+        {
+          "kind": "eq",
+          "question_id": "Q_EASE_OF_USE",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "prompt": "Respondents with no features used",
+    "expected_ok": false,
+    "expected_base_n": null
+  },
+  {
+    "prompt": "What is the capital of Sweden?",
+    "expected_ok": true,
+    "expected_base_n": 21,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_REGION",
+      "value": "CENTRAL"
+    }
+  },
+  {
+    "prompt": "Stock prices for Apple",
+    "expected_ok": true,
+    "expected_base_n": 28,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_PLAN",
+      "value": "ENT"
+    }
+  },
+  {
+    "prompt": "Respondents on Mars",
+    "expected_ok": false,
+    "expected_base_n": null
+  },
+  {
+    "prompt": "Weather in London",
+    "expected_ok": true,
+    "expected_base_n": 21,
+    "expected_definition": {
+      "kind": "eq",
+      "question_id": "Q_REGION",
+      "value": "CENTRAL"
+    }
+  },
+  {
+    "prompt": "Respondents with purple hair",
+    "expected_ok": false,
+    "expected_base_n": null
+  }
+]

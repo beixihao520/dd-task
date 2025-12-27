@@ -1,0 +1,29 @@
+{
+  "cut_id": "cut_003",
+  "metric_type": "mean",
+  "question_id": "Q_OVERALL_SAT",
+  "result_data": {
+    "by_dimension": {
+      "HIGH": 4.45,
+      "LOW": 2.6667,
+      "MED": 4.0667,
+      "VHIGH": 4.7692
+    },
+    "base_sizes": {
+      "HIGH": 20,
+      "LOW": 12,
+      "MED": 15,
+      "VHIGH": 13
+    }
+  },
+  "base_n": 60,
+  "dimensions": [
+    "question:Q_INCOME"
+  ],
+  "warnings": [
+    "[HIGH] Base size (20) is below minimum threshold (30). Results may not be statistically reliable.",
+    "[LOW] Base size (12) is below minimum threshold (30). Results may not be statistically reliable.",
+    "[MED] Base size (15) is below minimum threshold (30). Results may not be statistically reliable.",
+    "[VHIGH] Base size (13) is below minimum threshold (30). Results may not be statistically reliable."
+  ]
+}

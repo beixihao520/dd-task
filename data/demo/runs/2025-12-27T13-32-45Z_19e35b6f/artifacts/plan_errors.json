@@ -1,0 +1,5 @@
+{
+  "errors": [
+    "tool_error: High-level planner failed: Error code: 400 - {'error': {'message': \"Invalid schema for response_format 'HighLevelPlan': In context=('properties', 'children', 'items'), 'oneOf' is not permitted.\", 'type': 'invalid_request_error', 'param': 'response_format', 'code': None}}"
+  ]
+}
