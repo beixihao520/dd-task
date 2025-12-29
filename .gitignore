@@ -214,3 +214,19 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pytest
+.pytest_cache/
+
+# Virtual env
+.venv/
+venv/
+
+# OS
+.DS_Store

@@ -1,0 +1,5 @@
+[
+  "cut_id='cut_nps_by_region' metric=MetricSpec(type='nps', question_id='Q_NPS', params={}) dimensions=[DimensionSpec(kind='question', id='Q_REGION')] filter=None weight_column=None output={}",
+  "cut_id='cut_nps_by_tenure_segment' metric=MetricSpec(type='nps', question_id='Q_NPS', params={}) dimensions=[DimensionSpec(kind='question', id='Q_TENURE'), DimensionSpec(kind='segment', id='long_term_customers'), DimensionSpec(kind='segment', id='new_customers')] filter=None weight_column=None output={}",
+  "cut_id='cut_at_risk_customers' metric=MetricSpec(type='frequency', question_id='Q_NPS', params={}) dimensions=[DimensionSpec(kind='segment', id='low_purchase_intent')] filter=Or(kind='or', children=[PredicateEq(kind='eq', question_id='Q_NPS', value=0), PredicateEq(kind='eq', question_id='Q_NPS', value=1), PredicateEq(kind='eq', question_id='Q_NPS', value=2), PredicateEq(kind='eq', question_id='Q_NPS', value=3), PredicateEq(kind='eq', question_id='Q_NPS', value=4), PredicateEq(kind='eq', question_id='Q_NPS', value=5), PredicateEq(kind='eq', question_id='Q_NPS', value=6)]) weight_column=None output={}"
+]

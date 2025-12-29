@@ -1,7 +1,6 @@
 """Deterministic execution engine for analysis cuts."""
 
 from typing import Any, Optional
-
 import pandas as pd
 from pydantic import BaseModel, Field
 
@@ -66,10 +65,34 @@ class Executor:
 
         # Pre-computed segment masks
         self._segment_masks: dict[str, pd.Series] = {}
+        self._segments_materialized = False
+        
+        # Materialize segments on first use, not in init
+        # This avoids wasting computation if no cuts use segments
 
     def materialize_segments(self) -> dict[str, int]:
         """Pre-compute masks for all segments."""
-        return {sid: 0 for sid in self.segments_by_id}
+        if self._segments_materialized:
+            # Return cached base sizes
+            return {seg_id: int(mask.sum()) for seg_id, mask in self._segment_masks.items()}
+        
+        segment_bases = {}
+        
+        for seg_id, segment_spec in self.segments_by_id.items():
+            # Build mask on the full DataFrame
+            mask = build_mask(self.df, segment_spec.definition, self.questions_by_id)
+            self._segment_masks[seg_id] = mask
+            
+            # Calculate base size
+            segment_bases[seg_id] = int(mask.sum())
+            
+            # Also compute complement mask for dimension comparisons
+            complement_id = f"not_{seg_id}"
+            self._segment_masks[complement_id] = ~mask
+            segment_bases[complement_id] = int((~mask).sum())
+        
+        self._segments_materialized = True
+        return segment_bases
 
     def execute_cuts(self, cuts: list[CutSpec]) -> ExecutionResult:
         """Execute all cuts and return results.
@@ -80,10 +103,7 @@ class Executor:
         Returns:
             ExecutionResult with tables and any errors
         """
-        # Materialize segments first
-        segment_bases = self.materialize_segments()
-
-        result = ExecutionResult(segments_computed=segment_bases)
+        result = ExecutionResult()
 
         for cut in cuts:
             try:
@@ -112,10 +132,37 @@ class Executor:
 
         # Apply cut filter if present
         if cut.filter is not None:
-            mask = mask & build_mask(self.df, cut.filter, self.questions_by_id)
+            if isinstance(cut.filter, str):
+                # String could be a segment ID
+                if cut.filter in self.segments_by_id:
+                    # Materialize segments if needed
+                    if not self._segments_materialized:
+                        self.materialize_segments()
+                    
+                    # Use pre-computed mask
+                    if cut.filter in self._segment_masks:
+                        mask = self._segment_masks[cut.filter]
+                    else:
+                        # Compute dynamically
+                        mask = build_mask(self.df, 
+                                         self.segments_by_id[cut.filter].definition,
+                                         self.questions_by_id)
+                else:
+                    # Try to treat as a simple column filter
+                    # Example: "Q1 == 'value'"
+                    try:
+                        # Evaluate the filter expression
+                        filtered_mask = self.df.eval(cut.filter)
+                        mask = mask & filtered_mask
+                    except:
+                        raise ValueError(f"Could not parse filter string: {cut.filter}")
+            else:
+                # Regular filter expression
+                filter_mask = build_mask(self.df, cut.filter, self.questions_by_id)
+                mask = mask & filter_mask
 
         # Get the filtered DataFrame
-        filtered_df = self.df[mask]
+        filtered_df = self.df[mask].copy()
 
         # Get the question for the metric
         question = self.questions_by_id.get(cut.metric.question_id)
@@ -134,7 +181,7 @@ class Executor:
         else:
             # Cross-tabulated metric
             return self._compute_metric_with_dimensions(
-                cut, filtered_df, question, col_name
+                cut, filtered_df, question, col_name, mask
             )
 
     def _compute_metric_simple(
@@ -199,13 +246,13 @@ class Executor:
             
         return result
 
-
     def _compute_metric_with_dimensions(
         self,
         cut: CutSpec,
         df: pd.DataFrame,
         question: Optional[Question],
         col_name: str,
+        base_mask: pd.Series,
     ) -> TableResult:
         """Compute a metric with dimension cross-tabulation."""
         # For now, support single dimension
@@ -224,6 +271,7 @@ class Executor:
 
         # Get dimension values
         if dim.kind == "question":
+            # Question dimension
             dim_question = self.questions_by_id.get(dim.id)
             if dim_question is None:
                 raise ValueError(f"Dimension question '{dim.id}' not found")
@@ -231,19 +279,49 @@ class Executor:
             if dim_col not in df.columns:
                 raise ValueError(f"Dimension column '{dim_col}' not found")
             groups = df.groupby(dim_col)
+            
+        elif dim.kind == "segment":
+            # Segment dimension - handle specially
+            # Materialize segments if needed
+            if not self._segments_materialized:
+                self.materialize_segments()
+            
+            if dim.id in self._segment_masks:
+                # Use pre-computed mask, but align it with the filtered dataframe
+                full_mask = self._segment_masks[dim.id]
+                # Apply the base filter mask to get correct subset
+                segment_mask = full_mask[base_mask.index].fillna(False)
+                
+                groups = {
+                    f"{dim.id}": df[segment_mask],
+                    f"not_{dim.id}": df[~segment_mask],
+                }
+            elif dim.id in self.segments_by_id:
+                # Compute mask on full df, then apply to filtered df
+                full_mask = build_mask(self.df, self.segments_by_id[dim.id].definition, self.questions_by_id)
+                segment_mask = full_mask[base_mask.index].fillna(False)
+                
+                groups = {
+                    f"{dim.id}": df[segment_mask],
+                    f"not_{dim.id}": df[~segment_mask],
+                }
+            else:
+                raise ValueError(f"Segment dimension '{dim.id}' not found")
         else:
-            # Segment dimension
-            groups = {
-                f"{dim.id}": df,
-                f"Not {dim.id}": df,
-            }
+            raise ValueError(f"Unknown dimension kind: {dim.kind}")
 
         # Compute metric for each group
         result_by_group: dict[str, Any] = {}
         base_sizes: dict[str, int] = {}
 
         if isinstance(groups, pd.core.groupby.DataFrameGroupBy):
+            # Question dimension groups
             for group_val, group_df in groups:
+                if group_df.empty:
+                    result_by_group[str(group_val)] = None
+                    base_sizes[str(group_val)] = 0
+                    continue
+                    
                 series = group_df[col_name]
                 base_n = int(series.notna().sum())
                 base_sizes[str(group_val)] = base_n
@@ -260,8 +338,13 @@ class Executor:
                     cut.metric.type, series, question, cut.metric.params
                 )
         else:
-            # Dict-based groups (for segments)
+            # Dict-based groups (for segments or custom groupings)
             for group_val, group_df in groups.items():
+                if group_df.empty:
+                    result_by_group[group_val] = None
+                    base_sizes[group_val] = 0
+                    continue
+                    
                 series = group_df[col_name]
                 base_n = int(series.notna().sum())
                 base_sizes[group_val] = base_n
@@ -308,8 +391,6 @@ class Executor:
         
         return result
 
-
-
     def _compute_metric_value(
         self,
         metric_type: str,
@@ -318,32 +399,43 @@ class Executor:
         params: dict,
     ) -> Any:
         """Compute a single metric value for a group."""
-        if metric_type == "frequency":
-            if question is not None and question.type == QuestionType.multi_choice:
-                freq_df = compute_multi_choice_frequency(series, question)
+        if series.empty:
+            # Handle empty groups gracefully
+            if metric_type in ["mean", "nps", "top2box", "bottom2box"]:
+                return None
+            elif metric_type == "frequency":
+                return []
+        
+        try:
+            if metric_type == "frequency":
+                if question is not None and question.type == QuestionType.multi_choice:
+                    freq_df = compute_multi_choice_frequency(series, question)
+                else:
+                    freq_df = compute_frequency(series, question)
+                return freq_df.to_dict(orient="records")
+
+            elif metric_type == "mean":
+                result = compute_mean(series)
+                return result.get("mean")
+
+            elif metric_type == "top2box":
+                result = compute_top2box(series, question, params.get("top_values"))
+                return result.get("top2box_pct")
+
+            elif metric_type == "bottom2box":
+                result = compute_bottom2box(series, question, params.get("bottom_values"))
+                return result.get("bottom2box_pct")
+
+            elif metric_type == "nps":
+                result = compute_nps(
+                    series,
+                    params.get("promoter_min", 9),
+                    params.get("detractor_max", 6),
+                )
+                return result.get("nps")
+
             else:
-                freq_df = compute_frequency(series, question)
-            return freq_df.to_dict(orient="records")
-
-        elif metric_type == "mean":
-            result = compute_mean(series)
-            return result.get("mean")
-
-        elif metric_type == "top2box":
-            result = compute_top2box(series, question, params.get("top_values"))
-            return result.get("top2box_pct")
-
-        elif metric_type == "bottom2box":
-            result = compute_bottom2box(series, question, params.get("bottom_values"))
-            return result.get("bottom2box_pct")
-
-        elif metric_type == "nps":
-            result = compute_nps(
-                series,
-                params.get("promoter_min", 9),
-                params.get("detractor_max", 6),
-            )
-            return result.get("nps")
-
-        else:
-            raise ValueError(f"Unknown metric type: {metric_type}")
+                raise ValueError(f"Unknown metric type: {metric_type}")
+        except Exception as e:
+            # Gracefully handle computation errors
+            return None

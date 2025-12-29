@@ -1,0 +1,7 @@
+{
+  "prompt": "Analyze feature importance",
+  "errors": [
+    "code='no_cut_generated' message='LLM did not generate a CutSpec' context={}"
+  ],
+  "timestamp": "2025-12-29T23:20:35.887600"
+}
