@@ -1,0 +1,608 @@
+[
+  {
+    "prompt": "Frequency of gender",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "frequency",
+      "question_id": "Q_GENDER",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "Average age",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_AGE",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": 54.59
+    }
+  },
+  {
+    "prompt": "NPS score for the product",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "nps",
+      "question_id": "Q_NPS",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": -47.0
+    }
+  },
+  {
+    "prompt": "Top 2 box for overall satisfaction",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "top2box",
+      "question_id": "Q_OVERALL_SAT",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "Bottom 2 box for ease of use",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "bottom2box",
+      "question_id": "Q_EASE_OF_USE",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "Value for money frequency",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "frequency",
+      "question_id": "Q_VALUE",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "Purchase intent distribution",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "frequency",
+      "question_id": "Q_PURCHASE_INTENT",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "Tenure distribution among customers",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "frequency",
+      "question_id": "Q_TENURE",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "Support satisfaction mean score",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_SUPPORT_SAT",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": 3.08
+    }
+  },
+  {
+    "prompt": "How many people use each feature?",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "frequency",
+      "question_id": "Q_FEATURES_USED",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "Show the average age broken down by income",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_AGE",
+      "dimension_ids": [
+        "Q_INCOME"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": 61.3043
+    }
+  },
+  {
+    "prompt": "Performance of NPS by region",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "nps",
+      "question_id": "Q_NPS",
+      "dimension_ids": [
+        "Q_REGION"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": -66.67
+    }
+  },
+  {
+    "prompt": "Frequency of features used by gender",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "frequency",
+      "question_id": "Q_FEATURES_USED",
+      "dimension_ids": [
+        "Q_GENDER"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "Top 2 box for support satisfaction by plan type",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "top2box",
+      "question_id": "Q_SUPPORT_SAT",
+      "dimension_ids": [
+        "Q_PLAN"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": 42.31
+    }
+  },
+  {
+    "prompt": "Bottom 2 box for ease of use by region",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "bottom2box",
+      "question_id": "Q_EASE_OF_USE",
+      "dimension_ids": [
+        "Q_REGION"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": 61.9
+    }
+  },
+  {
+    "prompt": "Overall satisfaction by tenure",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_OVERALL_SAT",
+      "dimension_ids": [
+        "Q_TENURE"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": 2.9394
+    }
+  },
+  {
+    "prompt": "Purchase intent across different usage frequencies",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "frequency",
+      "question_id": "Q_PURCHASE_INTENT",
+      "dimension_ids": [
+        "Q_USAGE_FREQ"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "Value for money by plan type",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_VALUE",
+      "dimension_ids": [
+        "Q_PLAN"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": 3.4615
+    }
+  },
+  {
+    "prompt": "Gender distribution by region",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "frequency",
+      "question_id": "Q_GENDER",
+      "dimension_ids": [
+        "Q_REGION"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "Average age by usage frequency",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_AGE",
+      "dimension_ids": [
+        "Q_USAGE_FREQ"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": 48.0
+    }
+  },
+  {
+    "prompt": "Compare overall satisfaction for regular 'Young Respondents' vs others",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_OVERALL_SAT",
+      "dimension_ids": [
+        "SEG_YOUNG"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": 3.2414
+    }
+  },
+  {
+    "prompt": "Break down purchase intent by the 'High Income' segment",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "frequency",
+      "question_id": "Q_PURCHASE_INTENT",
+      "dimension_ids": [
+        "SEG_HIGH_INCOME"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "Support satisfaction for 'Active Tech Users' compared to others",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_SUPPORT_SAT",
+      "dimension_ids": [
+        "SEG_TECH_ACTIVE",
+        "SEG_NOT_LOW_INCOME"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": 3.2745
+    }
+  },
+  {
+    "prompt": "Value for money rating by 'Males in the North' vs everyone else",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_VALUE",
+      "dimension_ids": [
+        "SEG_MALE_NORTH"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": 3.0
+    }
+  },
+  {
+    "prompt": "Plan frequency for the 'Excluded Low Income' segment",
+    "expected_ok": false,
+    "expected_plan": null,
+    "expected_results": null
+  },
+  {
+    "prompt": "NPS performance for 'Young OR High Income' respondents",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "nps",
+      "question_id": "Q_NPS",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 41,
+      "primary_value": -39.02
+    }
+  },
+  {
+    "prompt": "Average NPS for respondents aged 18 to 30",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_NPS",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 21,
+      "primary_value": 5.0
+    }
+  },
+  {
+    "prompt": "Overall satisfaction for people in the North or South regions",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_OVERALL_SAT",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 32,
+      "primary_value": 3.1562
+    }
+  },
+  {
+    "prompt": "Mean age for Female respondents",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_AGE",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 31,
+      "primary_value": 45.129
+    }
+  },
+  {
+    "prompt": "Top 2 box for satisfaction among 'Enterprise' plan users",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "top2box",
+      "question_id": "Q_OVERALL_SAT",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 28,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "Frequency of features used for respondents with 'Low' income",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "frequency",
+      "question_id": "Q_FEATURES_USED",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 31,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "NPS score for users in the 'West' region who are 'Monthly' users",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "nps",
+      "question_id": "Q_NPS",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 4,
+      "primary_value": 50.0
+    }
+  },
+  {
+    "prompt": "How many 'Daily' users recommend the product?",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "frequency",
+      "question_id": "Q_NPS",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 26,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "NPS score for 'Males in the North'",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "nps",
+      "question_id": "Q_NPS",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 2,
+      "primary_value": -100.0
+    }
+  },
+  {
+    "prompt": "Average support satisfaction for people who use the API feature",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_SUPPORT_SAT",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 32,
+      "primary_value": 3.4062
+    }
+  },
+  {
+    "prompt": "Show the income distribution for 'Active Tech Users'",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "frequency",
+      "question_id": "Q_INCOME",
+      "dimension_ids": [
+        "SEG_TECH_ACTIVE"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": null
+    }
+  },
+  {
+    "prompt": "Purchase intent for respondents who are NOT 'Very Satisfied' with support",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_PURCHASE_INTENT",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 75,
+      "primary_value": 3.0
+    }
+  },
+  {
+    "prompt": "Mean age for respondents who use either 'Data Export' OR 'Dashboard'",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "mean",
+      "question_id": "Q_AGE",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 63,
+      "primary_value": 55.6349
+    }
+  },
+  {
+    "prompt": "Check NPS for respondents who use 'Reporting' but live in the 'South'",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "nps",
+      "question_id": "Q_NPS",
+      "dimension_ids": []
+    },
+    "expected_results": {
+      "base_n": 5,
+      "primary_value": -40.0
+    }
+  },
+  {
+    "prompt": "Calculate the mean of Region",
+    "expected_ok": false,
+    "expected_plan": null,
+    "expected_results": null
+  },
+  {
+    "prompt": "What is the average Gender?",
+    "expected_ok": false,
+    "expected_plan": null,
+    "expected_results": null
+  },
+  {
+    "prompt": "NPS score for Age",
+    "expected_ok": true,
+    "expected_plan": {
+      "metric_type": "nps",
+      "question_id": "Q_NPS",
+      "dimension_ids": [
+        "Q_AGE"
+      ]
+    },
+    "expected_results": {
+      "base_n": 100,
+      "primary_value": -100.0
+    }
+  },
+  {
+    "prompt": "What is the capital of France?",
+    "expected_ok": false,
+    "expected_plan": null,
+    "expected_results": null
+  },
+  {
+    "prompt": "Show the stock price of Microsoft",
+    "expected_ok": false,
+    "expected_plan": null,
+    "expected_results": null
+  },
+  {
+    "prompt": "Satisfaction for respondents who live on Mars",
+    "expected_ok": false,
+    "expected_plan": null,
+    "expected_results": null
+  },
+  {
+    "prompt": "Average of features used",
+    "expected_ok": false,
+    "expected_plan": null,
+    "expected_results": null
+  },
+  {
+    "prompt": "Show me the weather in San Francisco",
+    "expected_ok": false,
+    "expected_plan": null,
+    "expected_results": null
+  },
+  {
+    "prompt": "Minimum salary of the CEO",
+    "expected_ok": false,
+    "expected_plan": null,
+    "expected_results": null
+  },
+  {
+    "prompt": "Distribution of the color blue",
+    "expected_ok": false,
+    "expected_plan": null,
+    "expected_results": null
+  },
+  {
+    "prompt": "Top 5 box for age",
+    "expected_ok": false,
+    "expected_plan": null,
+    "expected_results": null
+  }
+]
