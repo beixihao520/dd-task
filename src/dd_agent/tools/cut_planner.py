@@ -1,6 +1,7 @@
 """Cut planner tool for converting NL requests to CutSpecs."""
 
 import json
+import uuid
 from typing import Any, Optional
 from pydantic import BaseModel, Field
 
@@ -68,26 +69,24 @@ class CutPlanner(Tool):
             system_prompt = self._build_system_prompt(ctx)
             
             # 3. Call LLM to generate structured output
-            # Use correct parameter names for build_messages
+            # FIX: Correct parameter name
             messages = build_messages(
                 system_prompt=system_prompt,
                 user_content=user_content
             )
             
-            result = chat_structured_pydantic(
-                client=ctx.llm_client,
+            # FIX: chat_structured_pydantic returns tuple (instance, trace)
+            cut_plan, llm_trace = chat_structured_pydantic(
                 messages=messages,
-                response_model=CutPlanResult,
-                temperature=0.1  # Low temperature for determinism
+                model=CutPlanResult,
+                temperature=0.1
             )
             
             # 4. Process LLM response
-            if not result.ok:
+            if not cut_plan.ok:
                 return ToolOutput.failure(
-                    errors=[err("llm_failed", f"LLM failed to produce valid plan: {result.errors}")]
+                    errors=[err("llm_failed", f"LLM failed to produce valid plan: {cut_plan.errors}")]
                 )
-            
-            cut_plan = result.data
             
             # 5. Check for ambiguity requiring user clarification
             if cut_plan.ambiguity_options and len(cut_plan.ambiguity_options) > 1:
@@ -98,12 +97,17 @@ class CutPlanner(Tool):
                     trace={
                         "prompt": ctx.prompt,
                         "ambiguity_options": cut_plan.ambiguity_options,
-                        "resolution_map": cut_plan.resolution_map
+                        "resolution_map": cut_plan.resolution_map,
+                        "llm_trace": llm_trace
                     }
                 )
             
             # 6. Validate the generated CutSpec
             if cut_plan.cut:
+                # Generate cut_id if missing
+                if not cut_plan.cut.cut_id:
+                    cut_plan.cut.cut_id = f"cut_{uuid.uuid4().hex[:8]}"
+                
                 # Convert questions and segments to dictionaries for validation
                 questions_by_id = {q.question_id: q for q in ctx.questions}
                 segments_by_id = {s.segment_id: s for s in (ctx.segments or [])}
@@ -130,6 +134,7 @@ class CutPlanner(Tool):
                         "prompt": ctx.prompt,
                         "resolution_map": cut_plan.resolution_map,
                         "llm_response": cut_plan.model_dump(),
+                        "llm_trace": llm_trace,
                         "validation_passed": True
                     }
                 )
@@ -152,7 +157,12 @@ class CutPlanner(Tool):
             # Use question_id from the Question class
             question_desc = f"- ID: {q.question_id}, Label: '{q.label}', Type: {q.type.value}"
             if q.options:
-                options_str = ", ".join([f"'{opt.code}': '{opt.label}'" for opt in q.options])
+                # Handle numeric option codes for Likert
+                option_strings = []
+                for opt in q.options:
+                    # Show both code and label
+                    option_strings.append(f"'{opt.code}': '{opt.label}'")
+                options_str = ", ".join(option_strings)
                 question_desc += f", Options: {{{options_str}}}"
             questions_info.append(question_desc)
         
@@ -161,10 +171,16 @@ class CutPlanner(Tool):
         # Build segment catalog (if available)
         segments_str = ""
         if ctx.segments:
-            segments_info = [f"- ID: {s.segment_id}, Name: '{s.name}'" 
-                           for s in ctx.segments]
+            segments_info = []
+            for s in ctx.segments:
+                segment_desc = f"- ID: {s.segment_id}, Name: '{s.name}'"
+                # Add filter description if available
+                if hasattr(s, 'filter') and s.filter:
+                    segment_desc += f", Filter: {s.filter}"
+                segments_info.append(segment_desc)
             segments_str = "\nAvailable Segments:\n" + "\n".join(segments_info)
         
+        # FIX: Improved metric compatibility table
         return f"""You are a data analysis expert responsible for converting natural language analysis requests into precise CutSpec specifications.
 
 # Available Data
@@ -174,29 +190,50 @@ Here are the questions in the dataset:
 
 # Task
 Parse the user's natural language request into a CutSpec containing:
-1. metric: The metric to compute (MetricSpec object with 'type' and 'question_id')
-2. dimensions: List of dimensions to group by (each dimension is an object with 'kind' and 'id')
-3. filter: Optional filter condition (can be null)
+1. cut_id: Unique identifier (you can suggest, but system will generate if missing)
+2. metric: The metric to compute (MetricSpec object with 'type' and 'question_id')
+3. dimensions: List of dimensions to group by (each dimension is an object with 'kind' and 'id')
+4. filter: Optional filter condition (can be null)
 
 # Important Rules
 ## 1. Metric Compatibility
-- 'nps' metric can only be used with questions of type 'nps_0_10'
-- 'top2box' and 'bottom2box' can only be used with 'likert_1_5' or 'likert_1_7' questions
-- 'mean' can be used with 'likert_1_5', 'likert_1_7', 'numeric', 'nps_0_10'
-- 'frequency' can be used with all question types
+TYPE          | COMPATIBLE METRICS
+--------------|-------------------
+nps_0_10      | 'nps', 'mean', 'frequency'
+likert_1_5    | 'mean', 'top2box', 'bottom2box', 'frequency'
+likert_1_7    | 'mean', 'top2box', 'bottom2box', 'frequency'
+numeric       | 'mean', 'frequency'
+single_choice | 'frequency'
+multi_choice  | 'frequency'
+
+Key constraints:
+- 'nps' metric can ONLY be used with questions of type 'nps_0_10'
+- 'top2box' and 'bottom2box' can ONLY be used with 'likert_1_5' or 'likert_1_7' questions
+- If user says "NPS", you MUST use the nps_0_10 question
+- If user says "top-2-box" or "top2box", find Likert questions
 
 ## 2. Dimension Matching
 - Find the question ID that best matches the user's description
-- Example: "country" → look for questions with "country" or "region" in the label
+- Example: "country" → look for questions with "country", "region", "location" in the label
 - If multiple matches, record them in ambiguity_options
 - For segments: use 'kind': 'segment' and the segment ID
 
-## 3. Output Format
+## 3. Automatic Term Mapping
+Common mappings:
+- "NPS" or "Net Promoter Score" → Q_NPS (if exists)
+- "satisfaction" or "sat" → Q_OVERALL_SAT (if exists)
+- "country", "region", "geography" → Q_REGION (if exists)
+- "age" → Q_AGE (if exists)
+- "income" → Q_INCOME (if exists)
+- "gender" → Q_GENDER (if exists)
+- "plan" or "subscription" → Q_PLAN (if exists)
+
+## 4. Output Format
 You must return a CutPlanResult object with this exact structure:
 {{
     "ok": true,
     "cut": {{
-        "cut_id": "auto_generated_unique_id",
+        "cut_id": "suggested_id_here",
         "metric": {{
             "type": "metric_type",
             "question_id": "QUESTION_ID"
@@ -212,57 +249,71 @@ You must return a CutPlanResult object with this exact structure:
 }}
 
 # Critical Instructions
-1. Generate a unique cut_id like "cut_nps_by_region_001"
+1. Suggest a cut_id based on metric and dimension (e.g., "cut_nps_by_region")
 2. Ensure metric compatibility (check question type)
 3. Map user terms to actual question/segment IDs in resolution_map
 4. If unsure about which question to use, add options to ambiguity_options
 5. Return ONLY valid JSON, no other text
 
 # Examples
-Example 1:
-User: "Show NPS by country"
-Available: Q_NPS (nps_0_10), Q_COUNTRY (single_choice)
+Example 1: "Show NPS by region"
+Available: Q_NPS (nps_0_10), Q_REGION (single_choice)
 Response: {{
     "ok": true,
     "cut": {{
-        "cut_id": "cut_nps_by_country_001",
+        "cut_id": "cut_nps_by_region",
         "metric": {{"type": "nps", "question_id": "Q_NPS"}},
-        "dimensions": [{{"kind": "question", "id": "Q_COUNTRY"}}],
-        "filter": null
-    }},
-    "resolution_map": {{"nps": "Q_NPS", "country": "Q_COUNTRY"}},
-    "ambiguity_options": [],
-    "errors": []
-}}
-
-Example 2:
-User: "Top 2 box satisfaction by region"
-Available: Q_SAT (likert_1_7), Q_REGION (single_choice)
-Response: {{
-    "ok": true,
-    "cut": {{
-        "cut_id": "cut_top2box_by_region_001",
-        "metric": {{"type": "top2box", "question_id": "Q_SAT"}},
         "dimensions": [{{"kind": "question", "id": "Q_REGION"}}],
         "filter": null
     }},
-    "resolution_map": {{"satisfaction": "Q_SAT", "region": "Q_REGION"}},
+    "resolution_map": {{"nps": "Q_NPS", "region": "Q_REGION"}},
     "ambiguity_options": [],
     "errors": []
 }}
 
-Now process the user request."""
+Example 2: "Top 2 box overall satisfaction by income level"
+Available: Q_OVERALL_SAT (likert_1_5), Q_INCOME (single_choice)
+Response: {{
+    "ok": true,
+    "cut": {{
+        "cut_id": "cut_top2box_sat_by_income",
+        "metric": {{"type": "top2box", "question_id": "Q_OVERALL_SAT"}},
+        "dimensions": [{{"kind": "question", "id": "Q_INCOME"}}],
+        "filter": null
+    }},
+    "resolution_map": {{"overall satisfaction": "Q_OVERALL_SAT", "income": "Q_INCOME"}},
+    "ambiguity_options": [],
+    "errors": []
+}}
+
+Example 3: "Compare ease of use mean between subscription plans"
+Available: Q_EASE_OF_USE (likert_1_5), Q_PLAN (single_choice)
+Response: {{
+    "ok": true,
+    "cut": {{
+        "cut_id": "cut_ease_mean_by_plan",
+        "metric": {{"type": "mean", "question_id": "Q_EASE_OF_USE"}},
+        "dimensions": [{{"kind": "question", "id": "Q_PLAN"}}],
+        "filter": null
+    }},
+    "resolution_map": {{"ease of use": "Q_EASE_OF_USE", "subscription plans": "Q_PLAN"}},
+    "ambiguity_options": [],
+    "errors": []
+}}
+
+Now process the user request below."""
 
     def _build_user_content(self, ctx: ToolContext) -> str:
         """Build the user message content."""
         return f"""Analysis request: "{ctx.prompt}"
 
-Based on the available questions and segments shown in the system prompt, generate the appropriate CutSpec.
+Based on the available questions and segments shown above, generate the appropriate CutSpec.
 
 Remember:
 1. Check metric compatibility with question type
-2. Generate a unique cut_id
+2. Suggest a cut_id (system will finalize it)
 3. Map user terms to actual IDs in resolution_map
-4. Return ONLY valid JSON matching the CutPlanResult schema
+4. If ambiguous, add options to ambiguity_options
+5. Return ONLY valid JSON matching the CutPlanResult schema
 
 JSON Output:"""

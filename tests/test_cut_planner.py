@@ -29,11 +29,11 @@ def test_cut_planner_with_nps_request():
         )
     ]
     
-    # Create expected LLM response - Use DimensionSpec objects, not dicts
+    # Create expected LLM response
     expected_cut = CutSpec(
         cut_id="test_cut_001",
         metric=MetricSpec(type="nps", question_id="Q_NPS"),
-        dimensions=[DimensionSpec(kind="question", id="Q_REGION")],  # FIXED: Use DimensionSpec
+        dimensions=[DimensionSpec(kind="question", id="Q_REGION")],
         filter=None
     )
     
@@ -47,15 +47,15 @@ def test_cut_planner_with_nps_request():
     
     # Mock the chat_structured_pydantic function
     with patch('dd_agent.tools.cut_planner.chat_structured_pydantic') as mock_llm:
-        # Create a proper mock ToolOutput
-        mock_tool_output = MagicMock()
-        mock_tool_output.ok = True
-        mock_tool_output.data = expected_response
-        mock_tool_output.errors = []
-        mock_tool_output.warnings = []
-        mock_tool_output.trace = {}
-        
-        mock_llm.return_value = mock_tool_output
+        # FIX: chat_structured_pydantic returns a tuple (CutPlanResult, trace_dict)
+        # NOT a ToolOutput object
+        mock_llm.return_value = (expected_response, {
+            "model": "gpt-4",
+            "temperature": 0.1,
+            "latency_s": 0.5,
+            "usage": {"prompt_tokens": 100, "completion_tokens": 50, "total_tokens": 150},
+            "finish_reason": "stop"
+        })
         
         # Create CutPlanner
         planner = CutPlanner()
@@ -65,7 +65,7 @@ def test_cut_planner_with_nps_request():
         ctx.prompt = "Show NPS by region"
         ctx.questions = questions
         ctx.segments = []
-        ctx.llm_client = MagicMock()
+        ctx.llm_client = MagicMock()  # This won't be used due to mock
         
         # Run the planner
         result = planner.run(ctx)
@@ -76,7 +76,6 @@ def test_cut_planner_with_nps_request():
         assert result.data.metric.type == "nps"
         assert result.data.metric.question_id == "Q_NPS"
         assert len(result.data.dimensions) == 1
-        # FIXED: Access id attribute of DimensionSpec object
         assert result.data.dimensions[0].id == "Q_REGION"
 
 def test_cut_planner_with_dimension_specs():
